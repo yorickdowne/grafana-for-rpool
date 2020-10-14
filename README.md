@@ -15,7 +15,7 @@ Exceedingly unlikely to work with any other version(s) of RocketPool or the clie
 ## Step 1 - get and prepare the project
 
 From your home directory - `cd ~` - clone the project:<br />
-`git clone https://github.com/yorickdowne/grafana-for-rpool.giti && cd grafana-for-rpool`
+`git clone https://github.com/yorickdowne/grafana-for-rpool.git && cd grafana-for-rpool`
 
 Copy the `default.env` file to `.env`:<br />
 `cp default.env .env`
