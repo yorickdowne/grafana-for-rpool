@@ -74,7 +74,7 @@ can use an [SSH tunnel](https://www.howtogeek.com/168145/how-to-use-ssh-tunnelin
 
 * Import a Dashboard. Click on the + icon on the left, choose "Import". Copy/paste JSON code from one of the client dashboard links below (click anywhere inside the page the link gets you to, use Ctrl-a to select all and Ctrl-C to copy), click "Load", if prompted choose the "prometheus" data source you just configured, click "Import". Note: The Metanull dashboard might also work with Lighthouse with small modifications, TBD.
 
-  * [Prysm Dashboard by Metanull] (https://raw.githubusercontent.com/metanull-operator/eth2-grafana/master/eth2-grafana-dashboard-single-source.json)
+  * [Prysm Dashboard by Metanull](https://raw.githubusercontent.com/metanull-operator/eth2-grafana/master/eth2-grafana-dashboard-single-source.json)
   * [Prysm Dashboard JSON](https://raw.githubusercontent.com/GuillaumeMiralles/prysm-grafana-dashboard/master/less_10_validators.json)
   * [Prysm Dashboard JSON for more than 10 validators](https://raw.githubusercontent.com/GuillaumeMiralles/prysm-grafana-dashboard/master/more_10_validators.json)
   * [Lighthouse Dashboard JSON](https://raw.githubusercontent.com/sigp/lighthouse-metrics/master/dashboards/Summary.json)
