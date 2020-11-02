@@ -35,8 +35,8 @@ Edit the shell scripts that start beacon and validator and add `--monitoring-hos
 For beacon:<br />
 `nano ~/.rocketpool/chains/eth2/start-beacon.sh`
 
-The startup line might then look like this if `--blst` and `--head-sync` are also added:<br />
-`<Original Line ends with --rpc-port 5052> --blst --head-sync --monitoring-host 0.0.0.0`
+The startup line might then look like this if `--blst` is also added:<br />
+`<Original Line ends with --rpc-port 5052> --blst --monitoring-host 0.0.0.0`
 
 For validator:<br />
 `nano ~/.rocketpool/chains/eth2/start-validator.sh`
@@ -51,8 +51,8 @@ Edit the shell script that starts the beacon and add `--metrics --metrics-addres
 For beacon:<br />
 `nano ~/.rocketpool/chains/eth2/start-beacon.sh`
 
-The startup line might then look like this if `--max-skip-slots none` is also added:<br />
-`<Original line ends with --http-port 5052> --max-skip-slots none --metrics --metrics-address 0.0.0.0`
+The startup line might then look like this:<br />
+`<Original line ends with --http-port 5052> --metrics --metrics-address 0.0.0.0`
 
 ### And restart the rocketpool services
 
