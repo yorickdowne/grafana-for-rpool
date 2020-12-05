@@ -35,14 +35,14 @@ Edit the shell scripts that start beacon and validator and add `--monitoring-hos
 For beacon:<br />
 `nano ~/.rocketpool/chains/eth2/start-beacon.sh`
 
-The startup line might then look like this if `--blst` is also added:<br />
-`<Original Line ends with --rpc-port 5052> --blst --monitoring-host 0.0.0.0`
+The startup line might then look like this:<br />
+`<Original Line ends with --rpc-port 5052> --monitoring-host 0.0.0.0`
 
 For validator:<br />
 `nano ~/.rocketpool/chains/eth2/start-validator.sh`
 
-The startup line might then look like this if `--blst` is also added and the graffiti changed to the RocketPool guild:<br />
-`<Original Line ends with --graffiti="$GRAFFITI"> --graffiti "guildwarz-rocket-pool" --blst --monitoring-host 0.0.0.0`
+The startup line might then look like this:<br />
+`<Original Line ends with --graffiti="$GRAFFITI"> --monitoring-host 0.0.0.0`
 
 ### Lighthouse
 
