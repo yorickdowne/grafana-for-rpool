@@ -15,19 +15,53 @@ services:
     command: ["/bin/prometheus", "--storage.tsdb.path=/prometheus", "--web.console.libraries=/usr/share/prometheus/console_libraries", "--web.console.templates=/usr/share/prometheus/consoles"]
     depends_on:
       - node-exporter
+      - blackbox-exporter
+      - json-exporter
+      - cryptowat-exporter
   node-exporter:
     restart: "unless-stopped"
     image: prom/node-exporter
     expose:
       - 9100/tcp
+  blackbox-exporter:
+    restart: "unless-stopped"
+    image: prom/blackbox-exporter:master
+    volumes:
+      - ./prometheus/blackbox.yml:/config/blackbox.yml
+    expose:
+      - 9115/tcp
+    command:
+      - --config.file=/config/blackbox.yml
+  json-exporter:
+    restart: "unless-stopped"
+    image: quay.io/prometheuscommunity/json-exporter
+    volumes:
+      - ./prometheus/json.yml:/config/json.yml
+    expose:
+      - 7979/tcp
+    command:
+      - --config.file
+      - /config/json.yml
+  cryptowat-exporter:
+    restart: "unless-stopped"
+    image: nbarrientos/cryptowat_exporter
+    environment:
+      - CRYPTOWAT_EXCHANGES=kraken
+      - CRYPTOWAT_PAIRS=ethusd,ethchf
+      - CRYPTOWAT_CACHESECONDS=300
+      - TZ=Europe/Zurich
+    expose:
+      - 9745/tcp
   grafana:
     restart: "unless-stopped"
-    image: grafana/grafana
+    build:
+      context: ./grafana
+    image: rpool-grafana
     volumes:
       - grafana-data:/var/lib/grafana
     depends_on:
       - prometheus
-    ports: 
+    ports:
       - ${GRAFANA_PORT}:3000/tcp
 volumes:
   grafana-data:

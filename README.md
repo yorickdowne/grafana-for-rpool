@@ -2,9 +2,9 @@
 Unofficial little hack to get a grafana dashboard for RocketPool
 
 Tested with:
-- RocketPool v0.0.6
-- Prysm 1.0.0-beta.0
-- Lighthouse v0.3.1
+- RocketPool v0.0.9
+- Prysm 1.0.3
+- Lighthouse v1.0.3
 
 Exceedingly unlikely to work with any other version(s) of RocketPool or the client.
 
@@ -18,7 +18,7 @@ From your home directory - `cd ~` - clone the project:<br />
 Copy the `default.env` file to `.env`:<br />
 `cp default.env .env`
 
-If you are using Lighthouse, edit `.env` to set the `CLIENT=lighthouse` variable:
+If you are using Prysm, edit `.env` to set the `CLIENT=prysm` variable:
 `nano .env`
 
 Likewise, if you need Grafana on a port other than 3000, edit the `.env` file and set
@@ -46,7 +46,7 @@ The startup line might then look like this:<br />
 
 ### Lighthouse
 
-Edit the shell script that starts the beacon and add `--metrics --metrics-address 0.0.0.0` to the line that starts the beacon.
+Edit the shell script that starts beacon and validator and add `--metrics --metrics-address 0.0.0.0` to the line that starts beacon and validator.
 
 For beacon:<br />
 `nano ~/.rocketpool/chains/eth2/start-beacon.sh`
@@ -54,10 +54,26 @@ For beacon:<br />
 The startup line might then look like this:<br />
 `<Original line ends with --http-port 5052> --metrics --metrics-address 0.0.0.0`
 
+For validator:<br />
+`nano ~/.rocketpool/chains/eth2/start-validator.sh`
+
+The startup line might then look like this:<br />
+`<Original Line ends with --graffiti="$GRAFFITI"> --metrics --metrics-address 0.0.0.0`
+
+### Geth
+
+If you are using Geth for eth1, edit the shell script that starts it and add `--metrics --metrics.expensive --pprof --pprof.addr=0.0.0.0` to the `CMD=` line before the closing `"`.
+
+`nano ~/.rocketpool/chains/eth1/start-node.sh`
+
+The CMD line might then look like this:<br />
+`<Original Line ends with --http.vhosts '*'> --metrics --metrics.expensive --pprof --pprof.addr=0.0.0.0"`
+
+> Note this needs to go *inside* the closing `"` on that line.
+
 ### And restart the rocketpool services
 
-Caution: Eth1 and eth2 will partially resync. You may be down for a few hours, and during times of non-finality, the penalties
-are very real. Consider how badly you want this dashboard.
+Caution: Eth1 and eth2 will partially resync. You may be down for a few hours.
 
 `rocketpool service pause && rocketpool service start`
 
@@ -70,18 +86,13 @@ are very real. Consider how badly you want this dashboard.
 Grafana is insecure http and there is no reverse proxy included in this project. Do not expose the Grafana port to the Internet. You
 can use an [SSH tunnel](https://www.howtogeek.com/168145/how-to-use-ssh-tunneling/) to the RocketPool node's host to get to the Grafana dashboard, if you are remote.
 
+If you are using a VPS, see notes on [cloud security](CLOUD.md) on how you might restrict access to Grafana, if your hosting provider
+does not offer security policies / a firewall.
+
 ## Step 5 - configure Grafana dashbaord
 
 * Connect to http://YOURSERVERIP:3000/ (or the specific port you gave Grafana), log in as admin/admin, set a new password
-
-* Click on the gear icon on the left, choose "Data Sources", and "Add Data Source". Choose Prometheus, use http://prometheus:9090 as the URL, then click "Save and Test".
-
-* Import a Dashboard. Click on the + icon on the left, choose "Import". Copy/paste JSON code from one of the client dashboard links below (click anywhere inside the page the link gets you to, use Ctrl-a to select all and Ctrl-C to copy), click "Load", if prompted choose the "prometheus" data source you just configured, click "Import".
-
-  * [Prysm Dashboard by Metanull](https://raw.githubusercontent.com/metanull-operator/eth2-grafana/master/eth2-grafana-dashboard-single-source.json)
-  * [Prysm Dashboard JSON](https://raw.githubusercontent.com/GuillaumeMiralles/prysm-grafana-dashboard/master/less_10_validators.json)
-  * [Prysm Dashboard JSON for more than 10 validators](https://raw.githubusercontent.com/GuillaumeMiralles/prysm-grafana-dashboard/master/more_10_validators.json)
-  * [Lighthouse Dashboard JSON](https://raw.githubusercontent.com/sigp/lighthouse-metrics/master/dashboards/Summary.json)
+* A number of dashboards come pre-configured. You can add additional ones through the JSON Import function if you like: Plus sign on the left bar, and then "Import"
 
 ## Addendum - expected data
 
@@ -91,17 +102,14 @@ can use an [SSH tunnel](https://www.howtogeek.com/168145/how-to-use-ssh-tunnelin
 
 ## Addendum - updating this project
 
-The way Lighthouse offers metrics has changed with Lighthouse v0.3.1. To update this project to keep pace, run these lines one by one:
+To update this project when it adds functionality, run these lines one by one:
 
 ```
 cd ~/grafana-for-rpool
 docker-compose down
 git pull
-docker-compose build
+docker-compose build --pull
 docker-compose up -d grafana
 ```
-
-Remember to adjust start-beacon.sh so you can get metrics from Lighthouse.
-
 
 LICENSE: MIT
